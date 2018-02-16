@@ -66,6 +66,10 @@ public class Course {
 
 	public void setRoster(Object roster) {
 		this.roster = roster;
+	}
+
+	public String getCourseID() {
+		return courseID;
 	}	
 	
 	

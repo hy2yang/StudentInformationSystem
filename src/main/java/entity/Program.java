@@ -5,10 +5,12 @@ import java.util.Set;
 
 public class Program {
 	
+	private final int programID;
 	private final String programName;
 	private Set<String> courseIDs;
 	
-	public Program(String name) {
+	public Program(int id, String name) {
+		programID=id;
 		programName=name;
 		courseIDs= new HashSet<>();
 	}
@@ -23,6 +25,14 @@ public class Program {
 	
 	public boolean deleteCourse (String courseID) {
 		return courseIDs.remove(courseID);
+	}
+
+	public String getProgramName() {
+		return programName;
+	}
+
+	public int getProgramID() {
+		return programID;
 	}
 
 }

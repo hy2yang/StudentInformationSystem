@@ -45,5 +45,9 @@ public class Student {
 		if (!courseIDs.contains(courseID)) return false;
 		return courseIDs.remove(courseID);
 	}
+
+	public int getStudentID() {
+		return studentID;
+	}
 	
 }
