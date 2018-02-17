@@ -5,15 +5,15 @@ import java.util.Set;
 
 public class Student {
 
-	private final int studentID;
+	private final int ID;
 	private String name;
 	private Set<String> courseIDs;
-	private String programName;
+	private int programID;
 	
-	public Student(int id, String sName, String pName) {
-		studentID=id;
+	public Student(int sID, String sName, int pID) {
+		ID=sID;
 		name=sName;
-		programName=pName;
+		programID=pID;
 		courseIDs = new HashSet<>();		
 	}
 
@@ -25,12 +25,12 @@ public class Student {
 		this.name = name;
 	}
 
-	public String getProgramName() {
-		return programName;
+	public int getProgramID() {
+		return programID;
 	}
 
-	public void setProgramName(String programName) {
-		this.programName = programName;
+	public void setProgramID(int pID) {
+		this.programID = pID;
 	}
 	
 	public Set<String> getCourseIDs(){
@@ -46,8 +46,8 @@ public class Student {
 		return courseIDs.remove(courseID);
 	}
 
-	public int getStudentID() {
-		return studentID;
+	public int getID() {
+		return ID;
 	}
 	
 }
