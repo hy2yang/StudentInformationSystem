@@ -35,7 +35,7 @@ public class ProgramResource {
 		}
 	}
 	
-	@PUT
+	@POST
     @Produces(MediaType.TEXT_PLAIN)
 	public String addProgram( @FormParam("programID") int pID, @FormParam("programName") String name){		
 		ProgramDAO.addProgram( new Program(pID, name));
@@ -82,14 +82,6 @@ public class ProgramResource {
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
 	public String addCourseToProgram(@PathParam("programID") int pID, @FormParam("courseID") String cID){
-		ProgramDAO.getProgramByID(pID).addCourseByID(cID);
-		return getProgramCurriculum(pID);
-	}
-	
-	@Path("/{programID}/curriculum/{courseID}")
-	@PUT
-    @Produces(MediaType.TEXT_PLAIN)
-	public String addCourse(@PathParam("programID") int pID, @PathParam("courseID") String cID){
 		ProgramDAO.getProgramByID(pID).addCourseByID(cID);
 		return getProgramCurriculum(pID);
 	}
