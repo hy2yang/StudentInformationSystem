@@ -41,9 +41,10 @@ public class StudentResource {
 		return getAllStudents();
 	}
 	
+	@Path("/{studentID}")
 	@DELETE
     @Produces(MediaType.TEXT_PLAIN)
-	public String deleteStudent(@FormParam("studentID") int sID) {
+	public String deleteStudent(@PathParam("studentID") int sID) {
 		StudentDAO.deleteStudentByID(sID);
 		return getAllStudents();
 	}
@@ -89,10 +90,10 @@ public class StudentResource {
 		return getCourseIDs(sID);
 	}
 	
-	@Path("/{studentID}/courses")
+	@Path("/{studentID}/courses/{courseID}")
 	@DELETE
     @Produces(MediaType.TEXT_PLAIN)
-	public String dropCourse (@PathParam("studentID") int sID, @FormParam("courseID") String cID) {
+	public String dropCourse (@PathParam("studentID") int sID, @PathParam("courseID") String cID) {
 		StudentDAO.getStudentByID(sID).dropCourse(cID);
 		return getCourseIDs(sID);
 	}
