@@ -19,11 +19,11 @@ public class Program {
 		return courseIDs;
 	}
 	
-	public boolean addCourse (String courseID) {
+	public boolean addCourseByID (String courseID) {
 		return courseIDs.add(courseID);
 	}
 	
-	public boolean deleteCourse (String courseID) {
+	public boolean deleteCourseByID (String courseID) {
 		return courseIDs.remove(courseID);
 	}
 
