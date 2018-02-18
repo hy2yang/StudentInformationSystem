@@ -25,7 +25,7 @@ import entity.Student;
 import utilitises.JSONConverter;
 
 @Path("courses")
-public class CourseService {
+public class CourseResource {
 	
 	@GET
     @Produces(MediaType.TEXT_PLAIN)
