@@ -12,11 +12,6 @@ import entity.Student;
 public class StudentDAO {
 	
 	private static Map<Integer, Student> students = new HashMap<>();
-	/*static {
-		students.put(0, new Student(0,"student0",2));
-		students.put(1, new Student(1,"student1",1));
-		students.put(2, new Student(2,"student2",0));
-	}*/
 	
 	public static Collection<Student> getAllStudents () {
 		return students.values();

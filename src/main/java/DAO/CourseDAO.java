@@ -11,25 +11,7 @@ import entity.Student;
 
 public class CourseDAO {
 	
-	private static Map<String, Course> courses = new HashMap<>();
-	/*static {
-		courses.put("this0", new Course("this0"));
-		courses.put("is1", new Course("is1"));
-		courses.put("test2", new Course("test2"));
-		
-		Lecture[] samples = new Lecture[3];
-		for (Lecture l: samples) {
-			l.putMaterial("some picture", "picture URL");
-			l.putMaterial("some video", "video URL");
-			for (int i=0;i<2;++i) {
-				l.addNote("note No."+i);
-			}
-		}
-		
-		for (Course i: courses.values()) {
-			for (int j=0;j<samples.length;++j) i.addLecture(samples[j]);
-		}
-	}*/
+	private static Map<String, Course> courses = new HashMap<>();	
 	
 	
 	/*
