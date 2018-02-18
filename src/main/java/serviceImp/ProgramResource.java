@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import DAO.ProgramDAO;
+import entity.Course;
 import entity.Program;
 import utilitises.JSONConverter;
 
@@ -67,8 +68,8 @@ public class ProgramResource {
 	@Path("/{programID}/curriculum")
 	@GET
     @Produces(MediaType.TEXT_PLAIN)
-	public String getProgramCurriculum(@PathParam("programID") int pID){
-		Set<String> res=ProgramDAO.getProgramByID(pID).getCurriculum();
+	public String getProgramCourses(@PathParam("programID") int pID){
+		Set<Course> res=ProgramDAO.getCoursesOfProgram(pID);
 		try {
 			return JSONConverter.object2JSON(res);
 		} catch (JsonProcessingException e) {			
@@ -82,7 +83,7 @@ public class ProgramResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String addCourseToProgram(@PathParam("programID") int pID, @FormParam("courseID") String cID){
 		ProgramDAO.getProgramByID(pID).addCourseByID(cID);
-		return getProgramCurriculum(pID);
+		return getProgramCourses(pID);
 	}
 	
 	@Path("/{programID}/curriculum/{courseID}")
@@ -90,7 +91,7 @@ public class ProgramResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String deleteCourse(@PathParam("programID") int pID, @PathParam("courseID") String cID){
 		ProgramDAO.getProgramByID(pID).deleteCourseByID(cID);
-		return getProgramCurriculum(pID);
+		return getProgramCourses(pID);
 	}
 	
 }

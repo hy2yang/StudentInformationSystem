@@ -15,7 +15,7 @@ public class Program {
 		courseIDs= new HashSet<>();
 	}
 	
-	public Set<String> getCurriculum(){
+	public Set<String> getCourseIDs(){
 		return courseIDs;
 	}
 	

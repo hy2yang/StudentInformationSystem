@@ -2,8 +2,11 @@ package DAO;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import entity.Course;
 import entity.Student;
 
 public class StudentDAO {
@@ -19,8 +22,8 @@ public class StudentDAO {
 		return students.values();
 	}
 	
-	public static Student getStudentByID (int i) {
-		return students.get(i);
+	public static Student getStudentByID (int sID) {
+		return students.get(sID);
 	}
 	
 	public static boolean addStudent (Student s) {
@@ -29,9 +32,17 @@ public class StudentDAO {
 		return true;
 	}
 	
-	public static void deleteStudentByID (int i) {
-		students.remove(i);
+	public static void deleteStudentByID (int sID) {
+		students.remove(sID);
 	} 
 
+	public static Set<Course> getAllCoursesOfStudent (int sID) {
+		Set<String> IDs=students.get(sID).getCourseIDs();
+		Set<Course> courses=new HashSet<>();
+		for (String i: IDs) {
+			courses.add(CourseDAO.getCourseByID(i));
+		}
+		return courses;
+	}
 	
 }
