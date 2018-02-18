@@ -23,33 +23,28 @@ public class Course {
 		return lectures;
 	}
 	
+	public Lecture getLecture(int index) {
+		return lectures.get(index);
+	}
+	
 	public boolean addLecture (Lecture l) {
 		return lectures.add(l);
 	}
 	
-	public void deleteLecture (int i) {
-		lectures.remove(i);
-	}
-	
-	public Lecture getLacture (int index) {
-		if (index<0 || index>=lectures.size()) return null;
-		return lectures.get(index);
-	}
-	
-	public void updateLecture (int index, Lecture l) {
-		lectures.set(index, l);
+	public void deleteLecture (int index) {		
+		lectures.remove(index);
 	}
 	
 	public Set<Integer> getAllStudentIDs(){
 		return studentIDs;
 	}
 	
-	public boolean enrollStudent (int id) {
-		return studentIDs.add(id);
+	public boolean enrollStudent (int sID) {
+		return studentIDs.add(sID);
 	}
 	
-	public void dropStudent (int id) {
-		studentIDs.remove(id);
+	public void dropStudent (int sID) {
+		studentIDs.remove(sID);
 	}
 	
 	public Object getBoard() {
@@ -58,6 +53,10 @@ public class Course {
 
 	public void setBoard(Object board) {
 		this.board = board;
+	}
+	
+	public void deleteBoard() {
+		this.board = null;
 	}
 
 	public Object getRoster() {
@@ -68,9 +67,12 @@ public class Course {
 		this.roster = roster;
 	}
 
+	public void deleteRoster() {
+		this.roster = null;
+	}
+	
 	public String getCourseID() {
 		return courseID;
-	}	
-	
+	}
 	
 }

@@ -8,10 +8,12 @@ import java.util.Map;
 public class Lecture {
 
 	//private Course source;
+	private final String name;
 	private List<String> notes;
 	private Map<String, Object> materials;
 	
-	public Lecture() {
+	public Lecture(String lName) {
+		name=lName;
 		this.notes = new ArrayList<>();
 		this.materials = new HashMap<>();
 	}
@@ -43,8 +45,12 @@ public class Lecture {
 		notes.set(index, n);
 	}
 	
+	public Map<String, Object> getAllMaterails(){
+		return materials;
+	}
 	
-	public void postMaterial(String name, Object m) {
+	
+	public void addMaterial(String name, Object m) {
 		materials.put(name,m);
 	}
 	
@@ -54,6 +60,10 @@ public class Lecture {
 	
 	public void getMaterialByName(String name) {
 		materials.get(name);
+	}
+
+	public String getLectureName() {
+		return name;
 	}
 	
 }
