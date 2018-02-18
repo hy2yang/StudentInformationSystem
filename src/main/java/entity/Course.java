@@ -9,8 +9,8 @@ public class Course {
 	
 	private final String courseID;
 	private List<Lecture> lectures;
-	private Object board;
-	private Object roster;
+	private String board;
+	private String roster;
 	private Set<Integer> studentIDs;
 
 	public Course(String id) {
@@ -51,8 +51,8 @@ public class Course {
 		return board;
 	}
 
-	public void setBoard(Object board) {
-		this.board = board;
+	public void setBoard(String URL) {
+		this.board = URL;
 	}
 	
 	public void deleteBoard() {
@@ -63,8 +63,8 @@ public class Course {
 		return roster;
 	}
 
-	public void setRoster(Object roster) {
-		this.roster = roster;
+	public void setRoster(String URL) {
+		this.roster = URL;
 	}
 
 	public void deleteRoster() {

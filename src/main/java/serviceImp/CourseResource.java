@@ -85,8 +85,8 @@ public class CourseResource {
 	@Path("/{courseID}/board")
 	@PUT
     @Produces(MediaType.TEXT_PLAIN)
-	public String setBoardOfCourse(@PathParam("courseID") String cID, @FormParam("newBoard") Object b) {
-		CourseDAO.getCourseByID(cID).setBoard(b);
+	public String setBoardOfCourse(@PathParam("courseID") String cID, @FormParam("boardURL") String URL) {
+		CourseDAO.getCourseByID(cID).setBoard(URL);
 		return getBoardOfCourse(cID);
 	}
 	
@@ -114,8 +114,8 @@ public class CourseResource {
 	@Path("/{courseID}/roster")
 	@PUT
     @Produces(MediaType.TEXT_PLAIN)
-	public String setRosterOfCourse(@PathParam("courseID") String cID, @FormParam("newRoster") Object b) {
-		CourseDAO.getCourseByID(cID).setRoster(b);
+	public String setRosterOfCourse(@PathParam("courseID") String cID, @FormParam("rosterURL") String URL) {
+		CourseDAO.getCourseByID(cID).setRoster(URL);
 		return getRosterOfCourse(cID);
 	}
 	
@@ -250,7 +250,7 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String getMaterials(@PathParam("courseID") String cID,
 			@PathParam("lectureIndex") int index) {
-		Map<String, Object> res = CourseDAO.getCourseByID(cID).getLecture(index).getAllMaterails();	
+		Map<String, String> res = CourseDAO.getCourseByID(cID).getLecture(index).getAllMaterails();	
 		try {
 			return JSONConverter.object2JSON(res);
 		} catch (JsonProcessingException e) {			
@@ -263,8 +263,8 @@ public class CourseResource {
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
 	public String addMaterial(@PathParam("courseID") String cID, @PathParam("lectureIndex") int index,
-			@FormParam("materialName") String name , @FormParam("material") Object m) {
-		CourseDAO.getCourseByID(cID).getLecture(index).addMaterial(name, m);	
+			@FormParam("materialName") String name , @FormParam("materialURL") String URL) {
+		CourseDAO.getCourseByID(cID).getLecture(index).putMaterial(name, URL);	
 		return getMaterials(cID, index);	
 	}
 	
@@ -281,8 +281,8 @@ public class CourseResource {
 	@PUT
     @Produces(MediaType.TEXT_PLAIN)
 	public String updateMaterial(@PathParam("courseID") String cID, @PathParam("lectureIndex") int index,
-			@PathParam("materialName") String name , @FormParam("material") Object m) {
-		CourseDAO.getCourseByID(cID).getLecture(index).addMaterial(name, m);	
+			@PathParam("materialName") String name , @FormParam("materialURL") String URL) {
+		CourseDAO.getCourseByID(cID).getLecture(index).putMaterial(name, URL);	
 		return getMaterials(cID, index);	
 	}
 

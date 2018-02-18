@@ -12,7 +12,7 @@ import entity.Program;
 public class ProgramDAO {
 
 	private static Map<Integer, Program> programs = new HashMap<>();
-	static {
+	/*static {
 		Program s0= new Program(0,"ptest0");
 		s0.addCourseByID("this0");
 		programs.put(0, s0);
@@ -26,7 +26,7 @@ public class ProgramDAO {
 		s2.addCourseByID("test2");
 		programs.put(2, s2);	
 		
-	}
+	}*/
 	
 	public static Collection<Program> getAllPrograms () {
 		return programs.values();

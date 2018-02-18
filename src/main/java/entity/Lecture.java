@@ -10,7 +10,7 @@ public class Lecture {
 	//private Course source;
 	private final String name;
 	private List<String> notes;
-	private Map<String, Object> materials;
+	private Map<String, String> materials;
 	
 	public Lecture(String lName) {
 		name=lName;
@@ -45,21 +45,20 @@ public class Lecture {
 		notes.set(index, n);
 	}
 	
-	public Map<String, Object> getAllMaterails(){
+	public Map<String, String> getAllMaterails(){
 		return materials;
-	}
+	}	
 	
-	
-	public void addMaterial(String name, Object m) {
-		materials.put(name,m);
+	public void putMaterial(String name, String URL) {
+		materials.put(name,URL);
 	}
 	
 	public void deleteMaterial(String name) {
 		materials.remove(name);
 	}
 	
-	public void getMaterialByName(String name) {
-		materials.get(name);
+	public String getMaterialByName(String name) {
+		return materials.get(name);
 	}
 
 	public String getLectureName() {
