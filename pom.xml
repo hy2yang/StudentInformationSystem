@@ -61,6 +61,11 @@
         <version>${jackson.version}</version>
     </dependency>
         
+    <dependency>
+    	<groupId>com.amazonaws</groupId>
+    	<artifactId>aws-java-sdk-dynamodb</artifactId>
+    	<version>1.11.289</version>
+    </dependency>
     </dependencies>
     <properties>
         <jackson.version>2.9.4</jackson.version>
