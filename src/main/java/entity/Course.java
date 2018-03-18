@@ -11,12 +11,14 @@ public class Course {
 	private List<Lecture> lectures;
 	private String board;
 	private String roster;
-	private Set<Integer> studentIDs;
+	private Set<String> studentIDs;
+	private Set<Integer> announcementIDs;
 
 	public Course(String id) {
 		courseID=id;
 		lectures=new LinkedList<>();
 		studentIDs= new HashSet<>();
+		announcementIDs = new HashSet<>();
 	}
 	
 	public List<Lecture> getAllLectures(){
@@ -35,15 +37,15 @@ public class Course {
 		lectures.remove(index);
 	}
 	
-	public Set<Integer> getAllStudentIDs(){
+	public Set<String> getAllStudentIDs(){
 		return studentIDs;
 	}
 	
-	public boolean enrollStudent (int sID) {
+	public boolean enrollStudent (String sID) {
 		return studentIDs.add(sID);
 	}
 	
-	public void dropStudent (int sID) {
+	public void dropStudent (String sID) {
 		studentIDs.remove(sID);
 	}
 	
@@ -73,6 +75,10 @@ public class Course {
 	
 	public String getCourseID() {
 		return courseID;
+	}
+	
+	public boolean addAnnouncement(int aid) {
+		return announcementIDs.add(aid);
 	}
 	
 }

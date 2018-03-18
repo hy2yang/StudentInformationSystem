@@ -1,43 +1,97 @@
 package DAO;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import com.amazonaws.services.dynamodbv2.document.DeleteItemOutcome;
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
+import com.amazonaws.services.dynamodbv2.model.ReturnValue;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
-import entity.Course;
-import entity.Student;
+import utilitises.JSONConverter;
 
 public class StudentDAO {
 	
-	private static Map<Integer, Student> students = new HashMap<>();
+	//private static Map<String, Student> students = new HashMap<>();
 	
-	public static Collection<Student> getAllStudents () {
-		return students.values();
-	}
+	private final static String TABLE_NAME="Students";
+	private static int count = 0; 	
+	private static final Table table = DynamoDBClient.getTableByName(TABLE_NAME);
 	
-	public static Student getStudentByID (int sID) {
-		return students.get(sID);
-	}
 	
-	public static boolean addStudent (Student s) {
-		if ( students.containsKey(s.getID()) ) return false;
+	public static String addStudent (String sName, String email) {
+		/*
+		Student s= new Student(sName, email);
 		students.put(s.getID(),s);
-		return true;
+		*/
+		String id=sIDgen(count++);
+		Map<String, Object> item = new HashMap<>();
+		item.put("studentID", id);
+		item.put("name", sName);
+		item.put("email", email);	
+		table.putItem(Item.fromMap(item));		
+		
+		return id;
 	}
 	
-	public static void deleteStudentByID (int sID) {
-		students.remove(sID);
-	} 
-
-	public static Set<Course> getAllCoursesOfStudent (int sID) {
+	private static String sIDgen( int i) {
+		return String.format("%s%05d", "S" ,i);
+	}	
+	
+	public static String getStudentByID (String sID) throws JsonProcessingException {
+		return JSONConverter.object2JSON(table.getItem("studentID", sID));
+	}
+		
+	public static DeleteItemOutcome deleteStudentByID (String sID) {
+		return table.deleteItem("studentID", sID);
+	}
+	
+	public static void enrollStudentToCourse(String sID, String cID) {
+		Set<String> set = new HashSet<>();
+		set.add(cID);
+		
+		UpdateItemSpec updateItemSpec = new UpdateItemSpec()
+				.withPrimaryKey("studentID", sID)
+				.withUpdateExpression("add courseIDs :c")
+				.withValueMap(new ValueMap()
+						.withStringSet(":c", set)
+						)
+				.withReturnValues(ReturnValue.ALL_NEW);
+		
+		table.updateItem(updateItemSpec);
+	}	
+	
+	
+	/*
+	public static Set<Course> getAllCoursesOfStudent (String sID) {
 		Set<String> IDs=students.get(sID).getCourseIDs();
 		Set<Course> courses=new HashSet<>();
 		for (String i: IDs) {
 			courses.add(CourseDAO.getCourseByID(i));
 		}
 		return courses;
+	}
+	*/
+	
+	/*
+	public static Collection<Student> getAllStudents () {		
+		return students.values();
+	}
+	*/
+	
+	
+	public static void main(String[] args) {
+		
+		String id =addStudent("tsdasdw", "asdwd@cecef.com");
+			
+		enrollStudentToCourse(id, "some course 1");
+		
+		enrollStudentToCourse(id, "some course 2");
+		
 	}
 	
 }

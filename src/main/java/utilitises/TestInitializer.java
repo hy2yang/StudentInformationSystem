@@ -11,7 +11,6 @@ import DAO.StudentDAO;
 import entity.Course;
 import entity.Lecture;
 import entity.Program;
-import entity.Student;
 
 @WebListener
 public class TestInitializer implements ServletContextListener{
@@ -25,9 +24,9 @@ public class TestInitializer implements ServletContextListener{
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		System.out.println("adding test values"); 
-		StudentDAO.addStudent(new Student(0,"student0",2));
-		StudentDAO.addStudent(new Student(1,"student1",1));
-		StudentDAO.addStudent(new Student(2,"student2",0));
+		String sid0= StudentDAO.addStudent("student0","email0");
+		String sid1= StudentDAO.addStudent("student1", "email1");
+		String sid2= StudentDAO.addStudent("student2", "email2");
 		
 		Lecture[] samplesL = new Lecture[3];
 		for (int i=0;i<samplesL.length;++i) {
@@ -61,9 +60,9 @@ public class TestInitializer implements ServletContextListener{
 		s2.addCourseByID("test2");
 		ProgramDAO.addProgram(s2);
 		
-		CrossDAO.studentEnrollCourse(0,"this0");
-		CrossDAO.studentEnrollCourse(1,"is1");
-		CrossDAO.studentEnrollCourse(2,"test2");		
+		CrossDAO.studentEnrollCourse(sid0,"this0");
+		CrossDAO.studentEnrollCourse(sid1,"is1");
+		CrossDAO.studentEnrollCourse(sid2,"test2");		
 		System.out.println("test value added"); 
 	}
 
