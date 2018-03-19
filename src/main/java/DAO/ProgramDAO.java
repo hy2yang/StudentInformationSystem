@@ -2,11 +2,7 @@ package DAO;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-
-import entity.Course;
 import entity.Program;
 
 public class ProgramDAO {
@@ -31,6 +27,7 @@ public class ProgramDAO {
 		programs.remove(pID);
 	}
 	
+	/*
 	public static Set<Course> getCoursesOfProgram(int pID) {
 		Set<String> IDs=programs.get(pID).getCourseIDs();
 		Set<Course> courses=new HashSet<>();
@@ -39,4 +36,5 @@ public class ProgramDAO {
 		}
 		return courses;
 	}
+	*/
 }

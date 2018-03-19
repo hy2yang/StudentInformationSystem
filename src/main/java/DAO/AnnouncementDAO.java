@@ -31,5 +31,11 @@ public class AnnouncementDAO {
 	private static String aIDgen(int i) {
 		return String.format("%s%07d", "A" ,i);
 	}
+	
+	public static void main(String[] args) {
+		for (int i=3; i<6;++i) {
+			newAnnouncement("A"+i, "fefe", "tellu", "what");
+		}
+	}
 
 }
