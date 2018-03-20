@@ -32,10 +32,8 @@ public class AnnouncementDAO {
 		return String.format("%s%07d", "A" ,i);
 	}
 	
-	public static void main(String[] args) {
-		for (int i=3; i<6;++i) {
-			newAnnouncement("A"+i, "fefe", "tellu", "what");
-		}
+	public static void main(String[] args) {		
+			newAnnouncement("A"+1, "fefe", "tellu", "what");
 	}
 
 }

@@ -63,12 +63,12 @@ public class AnnouncementEmailNotif implements RequestHandler<DynamodbEvent, Str
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("Professor ");
-		sb.append(getByID("Professors",pid).get("name").getS());		
-		sb.append("of course ");
+		sb.append(getByID("Professors","professorID",pid).get("name").getS());		
+		sb.append(" of course ");
 		sb.append(cid);
 		sb.append("--");
-		sb.append(getByID("Courses",cid).get("name").getS());
-		sb.append("just posted a new announcement at ");
+		sb.append(getByID("Courses","courseID",cid).get("name").getS());
+		sb.append(" just posted a new announcement at ");
 		sb.append(time);
 		sb.append(System.lineSeparator());
 		sb.append("Announcement header: ");
@@ -80,12 +80,12 @@ public class AnnouncementEmailNotif implements RequestHandler<DynamodbEvent, Str
 		return sb.toString();
 	}
 	
-	private Map<String, AttributeValue> getByID(String tableName,String id) {
+	private Map<String, AttributeValue> getByID(String tableName, String tableKey, String keyValue) {
 		
 		Map<String,String> names = new HashMap<>();
-	    names.put("#professorID", id);
+	    names.put("#professorID", tableKey);
 	    Map<String,AttributeValue> values = new HashMap<>();
-	    values.put(":p",new AttributeValue().withS(id));
+	    values.put(":p",new AttributeValue().withS(keyValue));
 
 		
 		QueryRequest queryRequest = new QueryRequest()
