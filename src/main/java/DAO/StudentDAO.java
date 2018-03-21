@@ -10,9 +10,6 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import utilitises.JSONConverter;
 
 public class StudentDAO {
 	
@@ -42,8 +39,8 @@ public class StudentDAO {
 		return String.format("%s%05d", "S" ,i);
 	}	
 	
-	public static String getStudentByID (String sID) throws JsonProcessingException {
-		return JSONConverter.object2JSON(table.getItem("studentID", sID));
+	public static Item getStudentByID (String sID){
+		return table.getItem("studentID", sID);
 	}
 		
 	public static DeleteItemOutcome deleteStudentByID (String sID) {
@@ -86,11 +83,9 @@ public class StudentDAO {
 	
 	public static void main(String[] args) {
 		
-		String id =addStudent("tsdasdw", "asdwd@cecef.com");
-			
-		enrollStudentToCourse(id, "some course 1");
-		
-		enrollStudentToCourse(id, "some course 2");
+		addStudent("tsdasdw", "tsdasdw@cecef.com");
+		addStudent("asdwd", "asdwd@cecef.com");
+		addStudent("oiuhgtt", "oiuhgtt@cecef.com");
 		
 	}
 	

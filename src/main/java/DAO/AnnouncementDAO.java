@@ -33,7 +33,7 @@ public class AnnouncementDAO {
 	}
 	
 	public static void main(String[] args) {		
-			newAnnouncement("A"+1, "fefe", "tellu", "what");
+			newAnnouncement("A1", "fefe", "new test header", "this announcement has just been added to ddb");
 	}
 
 }

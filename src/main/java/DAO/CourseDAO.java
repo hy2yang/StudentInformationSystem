@@ -8,6 +8,7 @@ import java.util.Set;
 import com.amazonaws.services.dynamodbv2.document.DeleteItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.UpdateItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
@@ -51,7 +52,7 @@ public class CourseDAO {
 		return table.deleteItem("courseID", courseID);
 	}
 	
-	public static void enrollStudentToCourse(String studentID, String courseID) {
+	public static UpdateItemOutcome enrollStudentToCourse(String studentID, String courseID) {
 		Set<String> set = new HashSet<>();
 		set.add(studentID);
 		
@@ -63,9 +64,20 @@ public class CourseDAO {
 						)
 				.withReturnValues(ReturnValue.ALL_NEW);
 		
-		table.updateItem(updateItemSpec);
+		return table.updateItem(updateItemSpec);
 	}	
 	
+	
+	public static void main(String[] args) {	
+		
+		enrollStudentToCourse("S00000", "A1");
+		enrollStudentToCourse("S00001", "A1");		
+		enrollStudentToCourse("S00002", "A1");
+		
+	}
+	
+	
+	/*
 	public static void addAnnouncement (String courseID, String aID) {
 		Set<String> set = new HashSet<>();
 		set.add(aID);
@@ -80,7 +92,7 @@ public class CourseDAO {
 		
 		table.updateItem(updateItemSpec);
 	}
-	
+	*/
 	
 	/*
 	
