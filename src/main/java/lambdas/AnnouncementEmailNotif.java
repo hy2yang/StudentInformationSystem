@@ -1,6 +1,7 @@
 package lambdas;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
@@ -10,6 +11,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.TableKeysAndAttributes;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
@@ -88,11 +90,12 @@ public class AnnouncementEmailNotif implements RequestHandler<DynamodbEvent, Str
 	}
 
 	private String emailBodyFromRecord (DynamodbStreamRecord record) {
-		String pid=record.getDynamodb().getNewImage().get("professorID").getS();
-		String cid=record.getDynamodb().getNewImage().get("courseID").getS();
-		String header = record.getDynamodb().getNewImage().get("header").getS();
-		String body = record.getDynamodb().getNewImage().get("body").getS();
-		String time = record.getDynamodb().getNewImage().get("time").getS();
+		Map<String, AttributeValue> m =record.getDynamodb().getNewImage();
+		String pid=m.get("professorID").getS();
+		String cid=m.get("courseID").getS();
+		String header = m.get("header").getS();
+		String body = m.get("body").getS();
+		String time = m.get("time").getS();
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("Professor ");
