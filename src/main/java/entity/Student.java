@@ -3,13 +3,29 @@ package entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
+@DynamoDBTable(tableName = "Students")
 public class Student {
 
+	@DynamoDBHashKey
 	private String ID;
+	
+	@DynamoDBAttribute
 	private String name;
+	
+	@DynamoDBAttribute
 	private String email;
+	
+	@DynamoDBAttribute
 	private Set<String> courseIDs;
-	private int programID;
+	
+	@DynamoDBAttribute
+	private String programID;
+	
+	public Student() {}
 	
 	public Student(String sName, String email) {
 		this.email= email;
@@ -17,8 +33,12 @@ public class Student {
 		courseIDs = new HashSet<>();		
 	}
 	
-	public void setSID(String sID) {
-		this.ID=sID;
+	public void setID(String id) {
+		ID = id;
+	}
+
+	public void setCourseIDs(Set<String> courseIDs) {
+		this.courseIDs = courseIDs;
 	}
 
 	public String getName() {
@@ -29,11 +49,11 @@ public class Student {
 		this.name = name;
 	}
 
-	public int getProgramID() {
+	public String getProgramID() {
 		return programID;
 	}
 
-	public void setProgramID(int pID) {
+	public void setProgramID(String pID) {
 		this.programID = pID;
 	}
 	
@@ -46,7 +66,6 @@ public class Student {
 	}
 	
 	public boolean dropCourse (String courseID) {
-		if (!courseIDs.contains(courseID)) return false;
 		return courseIDs.remove(courseID);
 	}
 

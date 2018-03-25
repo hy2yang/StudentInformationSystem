@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import DAO.CourseDAO;
 import DAO.CrossDAO;
 import DAO.StudentDAO;
 import entity.Course;
@@ -38,15 +39,14 @@ public class StudentResource {
 	
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
-	public String addStudent( @FormParam("studentID") int sID, @FormParam("studentName") String name, @FormParam("programID") int pID){		
-		StudentDAO.addStudent( new Student(sID, name, pID));
-		return getAllStudents();
+	public String addStudent( @FormParam("studentName") String name, @FormParam("email") String email){		
+		return StudentDAO.addStudent( new Student(name, email));
 	}
 	
 	@Path("/{studentID}")
 	@DELETE
     @Produces(MediaType.TEXT_PLAIN)
-	public String deleteStudent(@PathParam("studentID") int sID) {
+	public String deleteStudent(@PathParam("studentID") String sID) {
 		StudentDAO.deleteStudentByID(sID);
 		return getAllStudents();
 	}
@@ -54,7 +54,7 @@ public class StudentResource {
 	@Path("/{studentID}")
 	@GET
     @Produces(MediaType.TEXT_PLAIN)
-	public String getStudentByID( @PathParam("studentID") int sID) {
+	public String getStudentByID( @PathParam("studentID") String sID) {
 		Student res = StudentDAO.getStudentByID(sID);
 		try {
 			return JSONConverter.object2JSON(res);
@@ -67,11 +67,11 @@ public class StudentResource {
 	@Path("/{studentID}")
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
-	public String updateStudentInfo( @PathParam("studentID") int sID, @FormParam("studentName") String name, 
-			@FormParam("programID") @DefaultValue("-1") int pID) {
+	public String updateStudentInfo( @PathParam("studentID") String sID, @FormParam("studentName") String name, 
+			@FormParam("programID") @DefaultValue("") String pID) {
 		Student s=StudentDAO.getStudentByID(sID);
 		if (name!=null) s.setName(name);
-		if (pID!=-1) s.setProgramID(pID);
+		if (!pID.equals("")) s.setProgramID(pID);
 		return getAllStudents();
 	}
 	
@@ -79,8 +79,9 @@ public class StudentResource {
 	@Path("/{studentID}/courses")
 	@GET
     @Produces(MediaType.TEXT_PLAIN)
-	public String getCourses (@PathParam("studentID") int sID) {
-		Set<Course> courses = StudentDAO.getAllCoursesOfStudent(sID);
+	public String getCourses (@PathParam("studentID") String sID) {
+		Set<String> ids = StudentDAO.getStudentByID(sID).getCourseIDs();
+		Set<Course> courses = CourseDAO.getCourseByID(ids);
 		try {
 			return JSONConverter.object2JSON(courses);
 		} catch (JsonProcessingException e) {			
@@ -92,7 +93,7 @@ public class StudentResource {
 	@Path("/{studentID}/courses")
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
-	public String enrollCourse (@PathParam("studentID") int sID, @FormParam("courseID") String cID) {
+	public String enrollCourse (@PathParam("studentID") String sID, @FormParam("courseID") String cID) {
 		CrossDAO.studentEnrollCourse(sID, cID);
 		return getCourses(sID);
 	}
@@ -100,7 +101,7 @@ public class StudentResource {
 	@Path("/{studentID}/courses/{courseID}")
 	@DELETE
     @Produces(MediaType.TEXT_PLAIN)
-	public String dropCourse (@PathParam("studentID") int sID, @PathParam("courseID") String cID) {
+	public String dropCourse (@PathParam("studentID") String sID, @PathParam("courseID") String cID) {
 		CrossDAO.studentDropCourse(sID, cID);
 		return getCourses(sID);
 	}

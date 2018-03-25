@@ -1,37 +1,27 @@
 package DAO;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
-import com.amazonaws.services.dynamodbv2.document.DeleteItemOutcome;
-import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.Table;
-import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
-import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
-import com.amazonaws.services.dynamodbv2.model.ReturnValue;
+
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+
+import entity.Student;
+import utilitises.DynamoDBClient;
 
 public class StudentDAO {
 	
-	//private static Map<String, Student> students = new HashMap<>();
+	private static DynamoDBMapper mapper = DynamoDBClient.getMapper();
 	
-	private final static String TABLE_NAME="Students";
-	private static int count = 0; 	
-	private static final Table table = DynamoDBClient.getTableByName(TABLE_NAME);
-	
-	
-	public static String addStudent (String sName, String email) {
-		/*
-		Student s= new Student(sName, email);
-		students.put(s.getID(),s);
-		*/
-		String id=sIDgen(count++);
-		Map<String, Object> item = new HashMap<>();
-		item.put("studentID", id);
-		item.put("name", sName);
-		item.put("email", email);	
-		table.putItem(Item.fromMap(item));		
-		
+	public static String addStudent (Student s) {
+		String id;
+		do {
+			id=sIDgen((int)Math.random());
+		}
+		while ( mapper.load(Student.class, id)!=null);
+		s.setID(id);
+		mapper.save(s);
 		return id;
 	}
 	
@@ -39,53 +29,38 @@ public class StudentDAO {
 		return String.format("%s%05d", "S" ,i);
 	}	
 	
-	public static Item getStudentByID (String sID){
-		return table.getItem("studentID", sID);
-	}
-		
-	public static DeleteItemOutcome deleteStudentByID (String sID) {
-		return table.deleteItem("studentID", sID);
+	public static List<Student> getAllStudents(){
+		return mapper.scan(Student.class, new DynamoDBScanExpression());
 	}
 	
-	public static void enrollStudentToCourse(String sID, String cID) {
-		Set<String> set = new HashSet<>();
-		set.add(cID);
-		
-		UpdateItemSpec updateItemSpec = new UpdateItemSpec()
-				.withPrimaryKey("studentID", sID)
-				.withUpdateExpression("add courseIDs :c")
-				.withValueMap(new ValueMap()
-						.withStringSet(":c", set)
-						)
-				.withReturnValues(ReturnValue.ALL_NEW);
-		
-		table.updateItem(updateItemSpec);
-	}	
+	public static Student getStudentByID (String sID){
+		return mapper.load(Student.class, sID);
+	}
 	
-	
-	/*
-	public static Set<Course> getAllCoursesOfStudent (String sID) {
-		Set<String> IDs=students.get(sID).getCourseIDs();
-		Set<Course> courses=new HashSet<>();
-		for (String i: IDs) {
-			courses.add(CourseDAO.getCourseByID(i));
+	public static List<Student> getStudentByID (Set<String> ids) {
+		List<Student> res = new ArrayList<>(ids.size());
+		for (String i : ids) {
+			res.add(getStudentByID(i));
 		}
-		return courses;
+		return res;
 	}
-	*/
-	
+		
+	public static void deleteStudentByID (String sID) {
+		Student temp = new Student();
+		temp.setID(sID);
+		mapper.delete(temp);
+	}
 	/*
-	public static Collection<Student> getAllStudents () {		
-		return students.values();
-	}
-	*/
-	
+	public static void enrollStudentToCourse(String sID, String cID) {		
+		mapper.load(Student.class, sID).enrollCourse(cID);
+	}	
+	*/	
 	
 	public static void main(String[] args) {
 		
-		addStudent("tsdasdw", "tsdasdw@cecef.com");
-		addStudent("asdwd", "asdwd@cecef.com");
-		addStudent("oiuhgtt", "oiuhgtt@cecef.com");
+		addStudent(new Student("tsdasdw", "tsdasdw@cecef.com"));
+		addStudent(new Student("asdwd", "asdwd@cecef.com"));
+		addStudent(new Student("oiuhgtt", "oiuhgtt@cecef.com"));
 		
 	}
 	

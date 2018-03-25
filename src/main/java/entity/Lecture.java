@@ -5,25 +5,52 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Lecture {
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-	//private Course source;
-	private final String name;
+
+@DynamoDBTable(tableName = "Lectures")
+public class Lecture {
+	
+	@DynamoDBHashKey
+	private String lectureID;
+	
+	@DynamoDBAttribute
 	private List<String> notes;
+	
+	@DynamoDBAttribute
 	private Map<String, String> materials;
 	
-	public Lecture(String lName) {
-		name=lName;
+	public Lecture() {}
+	
+	public Lecture(String id) {
+		lectureID = id;
 		this.notes = new ArrayList<>();
 		this.materials = new HashMap<>();
 	}
 	
-	/*public Lecture(Course c) {
-		this.source = c;
-		this.notes = new ArrayList<>();
-		this.materials = new HashMap<>();
-	}*/
 	
+	public String getLectureID() {
+		return lectureID;
+	}
+
+	public void setLectureID(String lectureID) {
+		this.lectureID = lectureID;
+	}
+
+	public Map<String, String> getMaterials() {
+		return materials;
+	}
+
+	public void setMaterials(Map<String, String> materials) {
+		this.materials = materials;
+	}
+
+	public void setNotes(List<String> notes) {
+		this.notes = notes;
+	}
+
 	public List<String> getNotes() {
 		return notes;
 	}
@@ -61,8 +88,5 @@ public class Lecture {
 		return materials.get(name);
 	}
 
-	public String getLectureName() {
-		return name;
-	}
 	
 }

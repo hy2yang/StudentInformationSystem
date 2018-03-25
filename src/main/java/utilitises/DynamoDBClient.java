@@ -1,4 +1,4 @@
-package DAO;
+package utilitises;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import java.util.Map;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
@@ -27,11 +28,16 @@ public class DynamoDBClient {
 			.withCredentials(credentialsProvider)
 			.withRegion("us-west-2")
 			.build();
-	private static DynamoDB ddb = new DynamoDB(ddbClient);	
+	private static DynamoDB ddb = new DynamoDB(ddbClient);
+	
+	public static DynamoDBMapper getMapper() {
+		return new DynamoDBMapper(ddbClient);
+	}
 	
 	public static Table getTableByName(String tName) {
 		return ddb.getTable(tName);
 	}
+	
 	
     public static void createTable(String tableName, long readCapacityUnits, long writeCapacityUnits,
         String partitionKeyName, String partitionKeyType) {

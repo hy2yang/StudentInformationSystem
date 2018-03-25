@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import DAO.CourseDAO;
 import DAO.ProgramDAO;
 import entity.Course;
 import entity.Program;
@@ -37,7 +38,7 @@ public class ProgramResource {
 	
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
-	public String addProgram( @FormParam("programID") int pID, @FormParam("programName") String name){		
+	public String addProgram( @FormParam("programID") String pID, @FormParam("programName") String name){		
 		ProgramDAO.addProgram( new Program(pID, name));
 		return getAllPrograms();
 	}
@@ -45,7 +46,7 @@ public class ProgramResource {
 	@Path("/{programID}")
 	@DELETE
     @Produces(MediaType.TEXT_PLAIN)
-	public String deleteProgram( @PathParam("programID") int pID){
+	public String deleteProgram( @PathParam("programID") String pID){
 		ProgramDAO.deleteProgramByID(pID);
 		return getAllPrograms();
 	}
@@ -54,7 +55,7 @@ public class ProgramResource {
 	@Path("/{programID}")
 	@GET
     @Produces(MediaType.TEXT_PLAIN)
-	public String getProgramByID( @PathParam("programID") int pID){
+	public String getProgramByID( @PathParam("programID") String pID){
 		Program res=ProgramDAO.getProgramByID(pID);
 		try {
 			return JSONConverter.object2JSON(res);
@@ -68,8 +69,9 @@ public class ProgramResource {
 	@Path("/{programID}/curriculum")
 	@GET
     @Produces(MediaType.TEXT_PLAIN)
-	public String getProgramCourses(@PathParam("programID") int pID){
-		Set<Course> res=ProgramDAO.getCoursesOfProgram(pID);
+	public String getProgramCourses(@PathParam("programID") String pID){
+		Set<String> ids=ProgramDAO.getProgramByID(pID).getCourseIDs();		
+		Set<Course> res=CourseDAO.getCourseByID(ids);
 		try {
 			return JSONConverter.object2JSON(res);
 		} catch (JsonProcessingException e) {			
@@ -81,7 +83,7 @@ public class ProgramResource {
 	@Path("/{programID}/curriculum")
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
-	public String addCourseToProgram(@PathParam("programID") int pID, @FormParam("courseID") String cID){
+	public String addCourseToProgram(@PathParam("programID") String pID, @FormParam("courseID") String cID){
 		ProgramDAO.getProgramByID(pID).addCourseByID(cID);
 		return getProgramCourses(pID);
 	}
@@ -89,7 +91,7 @@ public class ProgramResource {
 	@Path("/{programID}/curriculum/{courseID}")
 	@DELETE
     @Produces(MediaType.TEXT_PLAIN)
-	public String deleteCourse(@PathParam("programID") int pID, @PathParam("courseID") String cID){
+	public String deleteCourse(@PathParam("programID") String pID, @PathParam("courseID") String cID){
 		ProgramDAO.getProgramByID(pID).deleteCourseByID(cID);
 		return getProgramCourses(pID);
 	}

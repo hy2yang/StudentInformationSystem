@@ -1,39 +1,44 @@
 package DAO;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+
+import entity.Announcement;
+import utilitises.DynamoDBClient;
 
 public class AnnouncementDAO {
 	
-	private final static String TABLE_NAME="Announcements";
-	private static int count = 0; 	
-	private static final Table table = DynamoDBClient.getTableByName(TABLE_NAME);	
-	
-	public static String newAnnouncement (String courseID, String pID, String header, String body) {
-		
-		String id=aIDgen(count++);
-		Map<String, Object> item = new HashMap<>();
-		item.put("announcementID", id);
-		item.put("courseID", courseID);
-		item.put("professorID", pID);
-		item.put("header", header);
-		item.put("body", body);	
-		item.put("time", LocalDateTime.now().toString());
-		table.putItem(Item.fromMap(item));		
-		
-		return id;
-	}
+	private static DynamoDBMapper mapper = DynamoDBClient.getMapper();	
 	
 	private static String aIDgen(int i) {
 		return String.format("%s%07d", "A" ,i);
 	}
 	
+	public static String postAnnouncement (Announcement toAdd) {		
+		String id;
+		do{
+			id=aIDgen((int)Math.random());		
+		} while (mapper.load(Announcement.class, id)!=null);
+		toAdd.setAnnouncementID(id);
+		toAdd.setTime(LocalDateTime.now().toString());
+		mapper.save(toAdd);		
+		return id;
+	}
+	
+	public static List<Announcement> getAnnouncementsOfCourse (String cid){
+		return mapper.query(Announcement.class
+				,new DynamoDBQueryExpression<Announcement>()
+				.addExpressionAttributeNamesEntry("courseID", cid));
+	}
+	
+	
+	
 	public static void main(String[] args) {		
-			newAnnouncement("A1", "fefe", "new test header", "this announcement has just been added to ddb");
+			postAnnouncement(new Announcement("A1", "fefe",
+					"new test header", "this announcement has just been added to ddb"));
 	}
 
 }

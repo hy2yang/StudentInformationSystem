@@ -11,6 +11,8 @@ import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 
+import utilitises.DynamoDBClient;
+
 public class ProfessorDAO {
 
 	private final static String TABLE_NAME="Professors";
