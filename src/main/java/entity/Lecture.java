@@ -25,9 +25,8 @@ public class Lecture {
 	public Lecture() {}
 	
 	public Lecture(String id) {
-		lectureID = id;
-		this.notes = new ArrayList<>();
-		this.materials = new HashMap<>();
+		lectureID = id;		
+		
 	}
 	
 	
@@ -56,6 +55,7 @@ public class Lecture {
 	}
 	
 	public boolean addNote( String n) {
+		if (notes==null) notes = new ArrayList<>();
 		return notes.add(n);
 	}
 	
@@ -72,11 +72,8 @@ public class Lecture {
 		notes.set(index, n);
 	}
 	
-	public Map<String, String> getAllMaterails(){
-		return materials;
-	}	
-	
 	public void putMaterial(String name, String URL) {
+		if (materials==null) this.materials = new HashMap<>();
 		materials.put(name,URL);
 	}
 	

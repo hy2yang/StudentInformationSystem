@@ -247,7 +247,7 @@ public class CourseResource {
 	public String getMaterials(@PathParam("courseID") String cID,
 			@PathParam("lectureIndex") int index) {
 		String id = CourseDAO.getCourseByID(cID).getLectureIDByIndex(index);
-		Map<String, String> res = LectureDAO.getLectureByID(id).getAllMaterails();	
+		Map<String, String> res = LectureDAO.getLectureByID(id).getMaterials();	
 		try {
 			return JSONConverter.object2JSON(res);
 		} catch (JsonProcessingException e) {			

@@ -2,6 +2,7 @@ package utilitises;
 
 import DAO.CourseDAO;
 import DAO.CrossDAO;
+import DAO.LectureDAO;
 import DAO.ProfessorDAO;
 import DAO.ProgramDAO;
 import DAO.StudentDAO;
@@ -26,6 +27,7 @@ public class TestInitializer {
 			for (int j=0;j<2;++j) {
 				samplesL[i].addNote("note No."+j);
 			}
+			LectureDAO.addLecture(samplesL[i]);
 		}
 		
 		String profid0 = ProfessorDAO.addProfessor("prof0", "email34");
