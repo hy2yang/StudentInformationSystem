@@ -14,16 +14,13 @@ public class AnnouncementDAO {
 	private static DynamoDBMapper mapper = DynamoDBClient.getMapper();	
 	
 	private static String aIDgen(int i) {
-		return String.format("%s%07d", "A" ,i);
+		return String.format("%s%010d", "A" ,i);
 	}
 	
-	public static String postAnnouncement (Announcement toAdd) {		
-		String id;
-		do{
-			id=aIDgen((int)Math.random());		
-		} while (mapper.load(Announcement.class, id)!=null);
-		toAdd.setAnnouncementID(id);
+	public static String postAnnouncement (Announcement toAdd) {	
 		toAdd.setTime(LocalDateTime.now().toString());
+		String id=aIDgen(toAdd.hashCode());		
+		toAdd.setAnnouncementID(id);		
 		mapper.save(toAdd);		
 		return id;
 	}

@@ -40,9 +40,7 @@ public class Course {
 		this.courseID=id;
 		this.name=name;
 		this.professorID=profId;
-		lectureIDs=new ArrayList<>();
-		studentIDs= new HashSet<>();
-		announcementIDs = new HashSet<>();
+		
 	}
 	
 	public String getCourseID() {
@@ -75,6 +73,7 @@ public class Course {
 	}
 	
 	public boolean addLecture (String lid) {
+		if (lectureIDs==null) lectureIDs=new ArrayList<>();
 		return lectureIDs.add(lid);
 	}
 	
@@ -100,6 +99,7 @@ public class Course {
 
 	
 	public boolean enrollStudent (String sID) {
+		if (studentIDs==null) studentIDs= new HashSet<>();
 		return studentIDs.add(sID);
 	}
 	
@@ -116,6 +116,7 @@ public class Course {
 	}	
 	
 	public boolean addAnnouncement(String aid) {
+		if (announcementIDs==null) announcementIDs = new HashSet<>();
 		return announcementIDs.add(aid);
 	}
 		

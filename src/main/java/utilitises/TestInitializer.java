@@ -1,9 +1,5 @@
 package utilitises;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
-
 import DAO.CourseDAO;
 import DAO.CrossDAO;
 import DAO.ProfessorDAO;
@@ -14,17 +10,9 @@ import entity.Lecture;
 import entity.Program;
 import entity.Student;
 
-@WebListener
-public class TestInitializer implements ServletContextListener{
-
-	@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void contextInitialized(ServletContextEvent arg0) {
+public class TestInitializer {
+	
+	public static void main(String[] args) {
 		System.out.println("adding test values"); 
 		String sid0= StudentDAO.addStudent(new Student("student0","email0"));
 		String sid1= StudentDAO.addStudent(new Student("student1", "email1"));

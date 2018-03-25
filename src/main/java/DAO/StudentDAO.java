@@ -14,19 +14,14 @@ public class StudentDAO {
 	
 	private static DynamoDBMapper mapper = DynamoDBClient.getMapper();
 	
-	public static String addStudent (Student s) {
-		String id;
-		do {
-			id=sIDgen((int)Math.random());
-		}
-		while ( mapper.load(Student.class, id)!=null);
-		s.setID(id);
+	public static String addStudent (Student s) {	
+		s.setStudentID(sIDgen(s.hashCode()));
 		mapper.save(s);
-		return id;
+		return s.getStudentID();
 	}
 	
 	private static String sIDgen( int i) {
-		return String.format("%s%05d", "S" ,i);
+		return String.format("%s%010d", "S" ,i);
 	}	
 	
 	public static List<Student> getAllStudents(){
@@ -47,20 +42,20 @@ public class StudentDAO {
 		
 	public static void deleteStudentByID (String sID) {
 		Student temp = new Student();
-		temp.setID(sID);
+		temp.setStudentID(sID);
 		mapper.delete(temp);
 	}
-	/*
-	public static void enrollStudentToCourse(String sID, String cID) {		
-		mapper.load(Student.class, sID).enrollCourse(cID);
-	}	
-	*/	
 	
 	public static void main(String[] args) {
 		
-		addStudent(new Student("tsdasdw", "tsdasdw@cecef.com"));
-		addStudent(new Student("asdwd", "asdwd@cecef.com"));
-		addStudent(new Student("oiuhgtt", "oiuhgtt@cecef.com"));
+		System.out.println(addStudent(new Student("tsdasdw", "tsdasdw@cecef.com")));
+		System.out.println(addStudent(new Student("asdwd", "asdwd@cecef.com")));
+		System.out.println(addStudent(new Student("oiuhgtt", "oiuhgtt@cecef.com")));
+		
+		for (Student i : getAllStudents()) {
+			System.out.println(i.toString());
+		}
+		
 		
 	}
 	
