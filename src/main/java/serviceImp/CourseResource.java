@@ -17,10 +17,12 @@ import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import DAO.AnnouncementDAO;
 import DAO.CourseDAO;
 import DAO.CrossDAO;
 import DAO.LectureDAO;
 import DAO.StudentDAO;
+import entity.Announcement;
 import entity.Course;
 import entity.Lecture;
 import entity.Student;
@@ -72,11 +74,11 @@ public class CourseResource {
 	
 	
 	
-	@Path("/{courseID}/board")
+	@Path("/{courseID}/announcements")
 	@GET
     @Produces(MediaType.TEXT_PLAIN)
-	public String getBoardOfCourse(@PathParam("courseID") String cID) {
-		Object res=CourseDAO.getCourseByID(cID).getBoard();
+	public String getAllAnnouncementsOfCourse(@PathParam("courseID") String cID) {
+		List<Announcement> res=AnnouncementDAO.getAnnouncementsOfCourse(cID);
 		try {
 			return JSONConverter.object2JSON(res);
 		} catch (JsonProcessingException e) {			
@@ -85,20 +87,29 @@ public class CourseResource {
 		}
 	}
 	
-	@Path("/{courseID}/board")
-	@PUT
+	@Path("/{courseID}/announcements")
+	@POST
     @Produces(MediaType.TEXT_PLAIN)
-	public String setBoardOfCourse(@PathParam("courseID") String cID, @FormParam("boardURL") String URL) {
-		CourseDAO.getCourseByID(cID).setBoard(URL);
-		return getBoardOfCourse(cID);
+	public String setBoardOfCourse(@PathParam("courseID") String cID,
+			@FormParam("professorID") String pID, @FormParam("header") String header,
+			@FormParam("body") String body) {
+		AnnouncementDAO.postAnnouncement(new Announcement(cID,pID,header,body));
+		return getAllAnnouncementsOfCourse(cID);
 	}
 	
-	@Path("/{courseID}/board")
-	@DELETE
+	@Path("/{courseID}/announcements/{announcementIndex}")
+	@GET
     @Produces(MediaType.TEXT_PLAIN)
-	public String deleteBoardOfCourse(@PathParam("courseID") String cID) {
-		CourseDAO.getCourseByID(cID).setBoard(null);
-		return getBoardOfCourse(cID);
+	public String deleteBoardOfCourse(@PathParam("courseID") String cID, 
+			@PathParam("announcementIndex") int index) {
+		String id = CourseDAO.getCourseByID(cID).getAnnouncementIDs().get(index);
+		Announcement res= AnnouncementDAO.getAnnouncementByID(id);
+		try {
+			return JSONConverter.object2JSON(res);
+		} catch (JsonProcessingException e) {			
+			e.printStackTrace();
+			return res.toString();
+		}
 	}
 	
 	

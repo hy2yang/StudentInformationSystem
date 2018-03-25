@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -20,9 +21,11 @@ import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.PutItemResult;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 
+@SuppressWarnings("unused")
 public class DynamoDBClient {
 	
-	private static ProfileCredentialsProvider credentialsProvider= new ProfileCredentialsProvider();
+	private static ProfileCredentialsProvider credentialsProvider =
+			new ProfileCredentialsProvider();//new EnvironmentVariableCredentialsProvider();
 	private static AmazonDynamoDB ddbClient=AmazonDynamoDBClientBuilder
 			.standard()
 			.withCredentials(credentialsProvider)

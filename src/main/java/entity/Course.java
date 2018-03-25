@@ -25,7 +25,7 @@ public class Course {
 	private Set<String> studentIDs;
 	
 	@DynamoDBAttribute
-	private Set<String> announcementIDs;	
+	private List<String> announcementIDs;	
 	
 	@DynamoDBAttribute
 	private List<String> lectureIDs;
@@ -89,11 +89,11 @@ public class Course {
 		this.studentIDs = studentIDs;
 	}
 
-	public Set<String> getAnnouncementIDs() {
+	public List<String> getAnnouncementIDs() {
 		return announcementIDs;
 	}
 
-	public void setAnnouncementIDs(Set<String> announcementIDs) {
+	public void setAnnouncementIDs(List<String> announcementIDs) {
 		this.announcementIDs = announcementIDs;
 	}
 
@@ -116,7 +116,7 @@ public class Course {
 	}	
 	
 	public boolean addAnnouncement(String aid) {
-		if (announcementIDs==null) announcementIDs = new HashSet<>();
+		if (announcementIDs==null) announcementIDs = new ArrayList<>();
 		return announcementIDs.add(aid);
 	}
 		

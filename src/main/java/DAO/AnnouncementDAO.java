@@ -17,6 +17,10 @@ public class AnnouncementDAO {
 		return String.format("%s%010d", "A" ,i);
 	}
 	
+	public static Announcement getAnnouncementByID (String aID){
+		return mapper.load(Announcement.class, aID);
+	}
+	
 	public static String postAnnouncement (Announcement toAdd) {	
 		toAdd.setTime(LocalDateTime.now().toString());
 		String id=aIDgen(toAdd.hashCode());		
