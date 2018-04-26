@@ -1,11 +1,13 @@
 package utilitises;
 
+import DAO.AnnouncementDAO;
 import DAO.CourseDAO;
 import DAO.CrossDAO;
 import DAO.LectureDAO;
 import DAO.ProfessorDAO;
 import DAO.ProgramDAO;
 import DAO.StudentDAO;
+import entity.Announcement;
 import entity.Course;
 import entity.Lecture;
 import entity.Program;
@@ -15,9 +17,9 @@ public class TestInitializer {
 	
 	public static void main(String[] args) {
 		System.out.println("adding test values"); 
-		String sid0= StudentDAO.addStudent(new Student("student0","email0"));
-		String sid1= StudentDAO.addStudent(new Student("student1", "email1"));
-		String sid2= StudentDAO.addStudent(new Student("student2", "email2"));
+		String sid0= StudentDAO.saveStudent(new Student("tsdasdw", "tsdasdw@cecef.com"));
+		String sid1= StudentDAO.saveStudent(new Student("asdwd", "asdwd@cecef.com"));
+		String sid2= StudentDAO.saveStudent(new Student("oiuhgtt", "oiuhgtt@cecef.com"));
 		
 		Lecture[] samplesL = new Lecture[3];
 		for (int i=0;i<samplesL.length;++i) {
@@ -27,7 +29,7 @@ public class TestInitializer {
 			for (int j=0;j<2;++j) {
 				samplesL[i].addNote("note No."+j);
 			}
-			LectureDAO.addLecture(samplesL[i]);
+			LectureDAO.saveLecture(samplesL[i]);
 		}
 		
 		String profid0 = ProfessorDAO.addProfessor("prof0", "email34");
@@ -40,25 +42,36 @@ public class TestInitializer {
 		samplesC[2]=new Course("test2", "course2", profid2);
 		for (int i=0;i<samplesC.length;++i) {
 			for (int j=0;j<samplesL.length;++j) samplesC[i].addLecture("l"+j);
-			CourseDAO.addCourse(samplesC[i]);
+			CourseDAO.saveCourse(samplesC[i]);
 		}
 		
 		Program s0= new Program("0","ptest0");
 		s0.addCourseByID("this0");
-		ProgramDAO.addProgram(s0);
+		ProgramDAO.saveProgram(s0);
 		
 		
 		Program s1= new Program("1","ptest1");
 		s1.addCourseByID("is1");
-		ProgramDAO.addProgram(s1);
+		ProgramDAO.saveProgram(s1);
 		
 		Program s2= new Program("2","ptest2");
 		s2.addCourseByID("test2");
-		ProgramDAO.addProgram(s2);
+		ProgramDAO.saveProgram(s2);
+		
+		
+		Program p1 = new Program("P4341", "testp1");
+		Program p2 = new Program("P8375", "testp2");
+		p1.addCourseByID("CH2312");
+		p2.addCourseByID("LI6453");
+		ProgramDAO.saveProgram(p1);
+		ProgramDAO.saveProgram(p2);
 		
 		CrossDAO.studentEnrollCourse(sid0,"this0");
-		CrossDAO.studentEnrollCourse(sid1,"is1");
-		CrossDAO.studentEnrollCourse(sid2,"test2");		
+		CrossDAO.studentEnrollCourse                                                                                                               (sid1,"is1");
+		CrossDAO.studentEnrollCourse(sid2,"test2");	
+		
+		AnnouncementDAO.saveAnnouncement(new Announcement("A1", "fefe",
+				"new test header", "this announcement has just been added to ddb"));
 		System.out.println("test value added"); 
 	}
 

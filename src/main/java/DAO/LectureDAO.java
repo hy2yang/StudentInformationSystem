@@ -17,10 +17,9 @@ public class LectureDAO {
 		return mapper.scan(Lecture.class, new DynamoDBScanExpression());
 	}
 	
-	public static boolean addLecture (Lecture l) {		
-		if ( mapper.load(Lecture.class, l.getLectureID())!=null ) return false;
+	public static String saveLecture (Lecture l) {
 		mapper.save(l);
-		return true;
+		return l.getLectureID();
 	}	
 	
 	public static Lecture getLectureByID (String lectureID){
@@ -39,7 +38,5 @@ public class LectureDAO {
 		}
 		return res;
 	}
-	
-	
 	
 }

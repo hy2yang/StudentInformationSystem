@@ -14,15 +14,10 @@ public class StudentDAO {
 	
 	private static DynamoDBMapper mapper = DynamoDBClient.getMapper();
 	
-	public static String addStudent (Student s) {	
-		s.setStudentID(sIDgen(s.hashCode()));
+	public static String saveStudent (Student s) {	
 		mapper.save(s);
 		return s.getStudentID();
 	}
-	
-	private static String sIDgen( int i) {
-		return String.format("%s%010d", "S" ,i);
-	}	
 	
 	public static List<Student> getAllStudents(){
 		return mapper.scan(Student.class, new DynamoDBScanExpression());
@@ -46,17 +41,15 @@ public class StudentDAO {
 		mapper.delete(temp);
 	}
 	
+	public static void saveStudentRecord(Student s) {
+		mapper.save(s);
+	}
+	
 	public static void main(String[] args) {
-		
-		System.out.println(addStudent(new Student("tsdasdw", "tsdasdw@cecef.com")));
-		System.out.println(addStudent(new Student("asdwd", "asdwd@cecef.com")));
-		System.out.println(addStudent(new Student("oiuhgtt", "oiuhgtt@cecef.com")));
-		
-		for (Student i : getAllStudents()) {
-			System.out.println(i.toString());
-		}
-		
-		
+		Student s = new Student("hoth", "ofepi@vgg.com");
+		System.out.println(s.getStudentID());
+		saveStudent(s);
+		System.out.println(s.getStudentID());
 	}
 	
 }

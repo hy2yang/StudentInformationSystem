@@ -39,7 +39,7 @@ public class ProgramResource {
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
 	public String addProgram( @FormParam("programID") String pID, @FormParam("programName") String name){		
-		ProgramDAO.addProgram( new Program(pID, name));
+		ProgramDAO.saveProgram( new Program(pID, name));
 		return getAllPrograms();
 	}
 	

@@ -17,10 +17,10 @@ public class CourseDAO {
 		return mapper.scan(Course.class, new DynamoDBScanExpression());
 	}
 	
-	public static boolean addCourse (Course c) {		
-		if ( mapper.load(Course.class, c.getCourseID())!=null ) return false;
+	public static String saveCourse (Course c) {		
+		if ( mapper.load(Course.class, c.getCourseID())!=null ) return null;
 		mapper.save(c);
-		return true;
+		return c.getCourseID();
 	}	
 	
 	public static Course getCourseByID (String courseID){
@@ -39,21 +39,5 @@ public class CourseDAO {
 		Course temp = new Course(pID, "to-be-deleted", "to-be-deleted");
 		mapper.delete(temp);
 	}
-	
-	public static void enrollStudentToCourse(String studentID, String courseID) {
-		
-		Course c = getCourseByID(courseID);
-		c.enrollStudent(studentID);
-		mapper.save(c);
-	}	
-	
-	
-	public static void main(String[] args) {	
-		
-		enrollStudentToCourse("S00000", "A1");
-		enrollStudentToCourse("S00001", "A1");		
-		enrollStudentToCourse("S00002", "A1");
-		
-	}	
 
 }

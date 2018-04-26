@@ -1,9 +1,17 @@
 package DAO;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+
+import entity.Course;
+import entity.Student;
+import utilitises.DynamoDBClient;
+
 public class CrossDAO {
-	/*
+	
 	private static DynamoDBMapper mapper = DynamoDBClient.getMapper();
 	
+	
+	/*
 	public static Set<Course> getCoursesOfProgram(String pID) {
 		Set<String> IDs=mapper.load(Program.class, pID).getCourseIDs();
 		Set<Course> courses=new HashSet<>();
@@ -14,19 +22,21 @@ public class CrossDAO {
 	}
 	*/
 	public static void studentEnrollCourse(String sID, String cID) {
-		
-		StudentDAO.getStudentByID(sID).enrollCourse(cID);
-		CourseDAO.getCourseByID(cID).enrollStudent(sID);
-		
-		
+		Student s = StudentDAO.getStudentByID(sID);
+		Course c = CourseDAO.getCourseByID(cID);
+		s.enrollCourse(cID);
+		c.enrollStudent(sID);
+		mapper.save(s);
+		mapper.save(c);		
 	}
 	
-	public static void studentDropCourse(String sID, String cID) {
-		
-		StudentDAO.getStudentByID(sID).dropCourse(cID);
-		CourseDAO.getCourseByID(cID).dropStudent(sID);
-		
-		
+	public static void studentDropCourse(String sID, String cID) {		
+		Student s = StudentDAO.getStudentByID(sID);
+		Course c = CourseDAO.getCourseByID(cID);
+		s.dropCourse(cID);
+		c.dropStudent(sID);
+		mapper.save(s);
+		mapper.save(c);
 	}
-
+	
 }

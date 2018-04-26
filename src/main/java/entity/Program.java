@@ -25,8 +25,7 @@ public class Program {
 		programID=id;
 		programName=name;
 		courseIDs= new HashSet<>();
-	}
-	
+	}	
 	
 	public String getProgramID() {
 		return programID;
@@ -36,24 +35,21 @@ public class Program {
 		this.programID = programID;
 	}
 	
-	
-	
 	public Set<String> getCourseIDs(){
 		return courseIDs;
 	}
+	
 	public void setCourseIDs(Set<String> courseIDs) {
 		this.courseIDs = courseIDs;
 	}
 	
-
-	
 	public String getProgramName() {
 		return programName;
 	}
+	
 	public void setProgramName(String programName) {
 		this.programName = programName;
-	}
-	
+	}	
 
 	public boolean addCourseByID (String courseID) {
 		return courseIDs.add(courseID);

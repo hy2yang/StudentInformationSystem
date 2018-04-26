@@ -47,7 +47,7 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String addCourse( @FormParam("courseID") String cID
 			,@FormParam("name") String name ,@FormParam("professorID") String pID){		
-		CourseDAO.addCourse(new Course(cID, name, pID));
+		CourseDAO.saveCourse(new Course(cID, name, pID));
 		return getAllCourses();
 	}
 	
@@ -93,7 +93,7 @@ public class CourseResource {
 	public String setBoardOfCourse(@PathParam("courseID") String cID,
 			@FormParam("professorID") String pID, @FormParam("header") String header,
 			@FormParam("body") String body) {
-		AnnouncementDAO.postAnnouncement(new Announcement(cID,pID,header,body));
+		AnnouncementDAO.saveAnnouncement(new Announcement(cID,pID,header,body));
 		return getAllAnnouncementsOfCourse(cID);
 	}
 	
@@ -165,7 +165,7 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String addLectureToCourse(@PathParam("courseID") String cID,
 										@FormParam("lectureID") String id) {
-		LectureDAO.addLecture(new Lecture(id));
+		LectureDAO.saveLecture(new Lecture(id));
 		CourseDAO.getCourseByID(cID).addLecture(id);
 		return getLecturesOfCourse(cID);
 		

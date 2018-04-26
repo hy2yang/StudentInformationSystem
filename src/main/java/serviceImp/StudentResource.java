@@ -8,6 +8,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -40,7 +41,7 @@ public class StudentResource {
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
 	public String addStudent( @FormParam("studentName") String name, @FormParam("email") String email){		
-		return StudentDAO.addStudent( new Student(name, email));
+		return StudentDAO.saveStudent( new Student(name, email));
 	}
 	
 	@Path("/{studentID}")
@@ -65,12 +66,12 @@ public class StudentResource {
 	}
 	
 	@Path("/{studentID}")
-	@POST
+	@PUT
     @Produces(MediaType.TEXT_PLAIN)
-	public String updateStudentInfo( @PathParam("studentID") String sID, @FormParam("studentName") String name, 
+	public String updateStudentInfo( @PathParam("studentID") String sID, @FormParam("studentName") @DefaultValue("") String name, 
 			@FormParam("programID") @DefaultValue("") String pID) {
 		Student s=StudentDAO.getStudentByID(sID);
-		if (name!=null) s.setName(name);
+		if (!name.equals("")) s.setName(name);
 		if (!pID.equals("")) s.setProgramID(pID);
 		return getAllStudents();
 	}
