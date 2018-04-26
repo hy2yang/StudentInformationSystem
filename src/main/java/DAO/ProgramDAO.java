@@ -1,42 +1,48 @@
 package DAO;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import entity.Course;
+import java.util.List;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import entity.Program;
+import utilitises.DynamoDBClient;
 
 public class ProgramDAO {
-
-	private static Map<Integer, Program> programs = new HashMap<>();
+	
+	private static DynamoDBMapper mapper = DynamoDBClient.getMapper();
 	
 	public static Collection<Program> getAllPrograms () {
-		return programs.values();
+		List<Program> res = mapper.scan(Program.class, new DynamoDBScanExpression());
+		return res;
 	}
 	
-	public static Program getProgramByID (int pID) {
-		return programs.get(pID);
+	public static Program getProgramByID (String pID) {		
+		return mapper.load(Program.class, pID);
 	}
 	
 	public static boolean addProgram (Program p) {
-		if ( programs.containsKey(p.getProgramID()) ) return false;
-		programs.put(p.getProgramID(),p);
+		if ( mapper.load(Program.class, p.getProgramID())!=null ) return false;
+		mapper.save(p);
 		return true;
 	}
 	
-	public static void deleteProgramByID (int pID) {
-		programs.remove(pID);
+	public static void deleteProgramByID (String pID) {
+		Program temp = new Program(pID, "to-be-deleted");
+		mapper.delete(temp);
 	}
 	
-	public static Set<Course> getCoursesOfProgram(int pID) {
-		Set<String> IDs=programs.get(pID).getCourseIDs();
-		Set<Course> courses=new HashSet<>();
-		for (String i: IDs) {
-			courses.add(CourseDAO.getCourseByID(i));
-		}
-		return courses;
+	public static void main(String[] args) {
+		Program p1 = new Program("P4341", "testp1");
+		Program p2 = new Program("P8375", "testp2");
+		p1.addCourseByID("CH2312");
+		p2.addCourseByID("LI6453");
+		System.out.println(addProgram(p1));
+		System.out.println(addProgram(p2));
+		System.out.println(getAllPrograms());
+		System.out.println(getProgramByID("P8375"));
+		deleteProgramByID("P4341");
+		System.out.println(getAllPrograms());
 	}
+	
+	
 }

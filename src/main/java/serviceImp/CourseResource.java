@@ -17,8 +17,12 @@ import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import DAO.AnnouncementDAO;
 import DAO.CourseDAO;
 import DAO.CrossDAO;
+import DAO.LectureDAO;
+import DAO.StudentDAO;
+import entity.Announcement;
 import entity.Course;
 import entity.Lecture;
 import entity.Student;
@@ -41,8 +45,9 @@ public class CourseResource {
 	
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
-	public String addCourse( @FormParam("courseID") String cID){		
-		CourseDAO.addCourse(new Course(cID));
+	public String addCourse( @FormParam("courseID") String cID
+			,@FormParam("name") String name ,@FormParam("professorID") String pID){		
+		CourseDAO.addCourse(new Course(cID, name, pID));
 		return getAllCourses();
 	}
 	
@@ -69,11 +74,11 @@ public class CourseResource {
 	
 	
 	
-	@Path("/{courseID}/board")
+	@Path("/{courseID}/announcements")
 	@GET
     @Produces(MediaType.TEXT_PLAIN)
-	public String getBoardOfCourse(@PathParam("courseID") String cID) {
-		Object res=CourseDAO.getCourseByID(cID).getBoard();
+	public String getAllAnnouncementsOfCourse(@PathParam("courseID") String cID) {
+		List<Announcement> res=AnnouncementDAO.getAnnouncementsOfCourse(cID);
 		try {
 			return JSONConverter.object2JSON(res);
 		} catch (JsonProcessingException e) {			
@@ -82,27 +87,23 @@ public class CourseResource {
 		}
 	}
 	
-	@Path("/{courseID}/board")
-	@PUT
+	@Path("/{courseID}/announcements")
+	@POST
     @Produces(MediaType.TEXT_PLAIN)
-	public String setBoardOfCourse(@PathParam("courseID") String cID, @FormParam("boardURL") String URL) {
-		CourseDAO.getCourseByID(cID).setBoard(URL);
-		return getBoardOfCourse(cID);
+	public String setBoardOfCourse(@PathParam("courseID") String cID,
+			@FormParam("professorID") String pID, @FormParam("header") String header,
+			@FormParam("body") String body) {
+		AnnouncementDAO.postAnnouncement(new Announcement(cID,pID,header,body));
+		return getAllAnnouncementsOfCourse(cID);
 	}
 	
-	@Path("/{courseID}/board")
-	@DELETE
-    @Produces(MediaType.TEXT_PLAIN)
-	public String deleteBoardOfCourse(@PathParam("courseID") String cID) {
-		CourseDAO.getCourseByID(cID).deleteBoard();
-		return getBoardOfCourse(cID);
-	}
-	
-	@Path("/{courseID}/roster")
+	@Path("/{courseID}/announcements/{announcementIndex}")
 	@GET
     @Produces(MediaType.TEXT_PLAIN)
-	public String getRosterOfCourse(@PathParam("courseID") String cID) {
-		Object res=CourseDAO.getCourseByID(cID).getRoster();
+	public String deleteBoardOfCourse(@PathParam("courseID") String cID, 
+			@PathParam("announcementIndex") int index) {
+		String id = CourseDAO.getCourseByID(cID).getAnnouncementIDs().get(index);
+		Announcement res= AnnouncementDAO.getAnnouncementByID(id);
 		try {
 			return JSONConverter.object2JSON(res);
 		} catch (JsonProcessingException e) {			
@@ -111,28 +112,15 @@ public class CourseResource {
 		}
 	}
 	
-	@Path("/{courseID}/roster")
-	@PUT
-    @Produces(MediaType.TEXT_PLAIN)
-	public String setRosterOfCourse(@PathParam("courseID") String cID, @FormParam("rosterURL") String URL) {
-		CourseDAO.getCourseByID(cID).setRoster(URL);
-		return getRosterOfCourse(cID);
-	}
 	
-	@Path("/{courseID}/roster")
-	@DELETE
-    @Produces(MediaType.TEXT_PLAIN)
-	public String deleteRosterOfCourse(@PathParam("courseID") String cID) {
-		CourseDAO.getCourseByID(cID).deleteRoster();
-		return getRosterOfCourse(cID);
-	}
 	
 	
 	@Path("/{courseID}/enrolledStudents")
 	@GET
     @Produces(MediaType.TEXT_PLAIN)
 	public String getStudentsOfCourse(@PathParam("courseID") String cID) {
-		Set<Student> res=CourseDAO.getAllStudentsOfCourse(cID);
+		Set<String> ids=CourseDAO.getCourseByID(cID).getStudentIDs();
+		List<Student> res =  StudentDAO.getStudentByID(ids);
 		try {
 			return JSONConverter.object2JSON(res);
 		} catch (JsonProcessingException e) {			
@@ -144,7 +132,7 @@ public class CourseResource {
 	@Path("/{courseID}/enrolledStudents")
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
-	public String enrollStudent(@PathParam("courseID") String cID, @FormParam("studentID") int sID) {
+	public String enrollStudent(@PathParam("courseID") String cID, @FormParam("studentID") String sID) {
 		CrossDAO.studentEnrollCourse(sID, cID);
 		return getStudentsOfCourse(cID);
 	}
@@ -152,7 +140,7 @@ public class CourseResource {
 	@Path("/{courseID}/enrolledStudents/{studentID}")
 	@DELETE
     @Produces(MediaType.TEXT_PLAIN)
-	public String dropStudent(@PathParam("courseID") String cID, @PathParam("studentID") int sID) {
+	public String dropStudent(@PathParam("courseID") String cID, @PathParam("studentID") String sID) {
 		CrossDAO.studentDropCourse(sID, cID);
 		return getStudentsOfCourse(cID);
 	}
@@ -162,7 +150,8 @@ public class CourseResource {
 	@GET
     @Produces(MediaType.TEXT_PLAIN)
 	public String getLecturesOfCourse(@PathParam("courseID") String cID) {
-		List<Lecture> res=CourseDAO.getCourseByID(cID).getAllLectures();
+		List<String> ids=CourseDAO.getCourseByID(cID).getLectureIDs();
+		List<Lecture> res = LectureDAO.getLectureByID(ids);
 		try {
 			return JSONConverter.object2JSON(res);
 		} catch (JsonProcessingException e) {			
@@ -175,8 +164,9 @@ public class CourseResource {
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
 	public String addLectureToCourse(@PathParam("courseID") String cID,
-										@FormParam("lectureName") String name) {
-		CourseDAO.getCourseByID(cID).addLecture( new Lecture(name));
+										@FormParam("lectureID") String id) {
+		LectureDAO.addLecture(new Lecture(id));
+		CourseDAO.getCourseByID(cID).addLecture(id);
 		return getLecturesOfCourse(cID);
 		
 	}
@@ -186,7 +176,7 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String deleteLecture(@PathParam("courseID") String cID,
 										@PathParam("lectureIndex") int index) {
-		CourseDAO.getCourseByID(cID).deleteLecture(index);
+		CourseDAO.getCourseByID(cID).deleteLectureByIndex(index);
 		return getLecturesOfCourse(cID);		
 	}
 	
@@ -195,7 +185,8 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String getLecture(@PathParam("courseID") String cID,
 			@PathParam("lectureIndex") int index) {
-		Lecture l = CourseDAO.getCourseByID(cID).getLecture(index);		
+		String id = CourseDAO.getCourseByID(cID).getLectureIDByIndex(index);
+		Lecture l = LectureDAO.getLectureByID(id);
 		try {
 			return JSONConverter.object2JSON(l);
 		} catch (JsonProcessingException e) {			
@@ -209,7 +200,9 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String getnotes(@PathParam("courseID") String cID,
 			@PathParam("lectureIndex") int index) {
-		List<String> res = CourseDAO.getCourseByID(cID).getLecture(index).getNotes();		
+		
+		String id = CourseDAO.getCourseByID(cID).getLectureIDByIndex(index);
+		List<String> res = LectureDAO.getLectureByID(id).getNotes();		
 		try {
 			return JSONConverter.object2JSON(res);
 		} catch (JsonProcessingException e) {			
@@ -223,7 +216,8 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String addNote(@PathParam("courseID") String cID,
 			@PathParam("lectureIndex") int index, @FormParam("note") String note ) {
-		CourseDAO.getCourseByID(cID).getLecture(index).addNote(note);	
+		String id = CourseDAO.getCourseByID(cID).getLectureIDByIndex(index);
+		LectureDAO.getLectureByID(id).addNote(note);	
 		return getnotes(cID, index);
 	}
 	
@@ -232,7 +226,8 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String deleteNote(@PathParam("courseID") String cID,
 			@PathParam("lectureIndex") int lIndex, @PathParam("noteIndex") int nIndex ) {
-		CourseDAO.getCourseByID(cID).getLecture(lIndex).deleteNote(nIndex);
+		String id = CourseDAO.getCourseByID(cID).getLectureIDByIndex(lIndex);
+		LectureDAO.getLectureByID(id).deleteNote(nIndex);
 		return getnotes(cID, lIndex);
 	}
 	
@@ -241,7 +236,8 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String updateNote(@PathParam("courseID") String cID, @PathParam("lectureIndex") int lIndex, 
 			@PathParam("noteIndex") int nIndex,  @FormParam("note") String note) {
-		CourseDAO.getCourseByID(cID).getLecture(lIndex).updateNote(nIndex, note);
+		String id = CourseDAO.getCourseByID(cID).getLectureIDByIndex(lIndex);
+		LectureDAO.getLectureByID(id).updateNote(nIndex, note);
 		return getnotes(cID, lIndex);
 	}
 	
@@ -250,7 +246,8 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String getMaterials(@PathParam("courseID") String cID,
 			@PathParam("lectureIndex") int index) {
-		Map<String, String> res = CourseDAO.getCourseByID(cID).getLecture(index).getAllMaterails();	
+		String id = CourseDAO.getCourseByID(cID).getLectureIDByIndex(index);
+		Map<String, String> res = LectureDAO.getLectureByID(id).getMaterials();	
 		try {
 			return JSONConverter.object2JSON(res);
 		} catch (JsonProcessingException e) {			
@@ -264,7 +261,8 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String addMaterial(@PathParam("courseID") String cID, @PathParam("lectureIndex") int index,
 			@FormParam("materialName") String name , @FormParam("materialURL") String URL) {
-		CourseDAO.getCourseByID(cID).getLecture(index).putMaterial(name, URL);	
+		String id = CourseDAO.getCourseByID(cID).getLectureIDByIndex(index);
+		LectureDAO.getLectureByID(id).putMaterial(name, URL);	
 		return getMaterials(cID, index);	
 	}
 	
@@ -273,7 +271,8 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String deleteMaterial(@PathParam("courseID") String cID, @PathParam("lectureIndex") int index,
 			@PathParam("materialName") String name) {
-		CourseDAO.getCourseByID(cID).getLecture(index).deleteMaterial(name);	
+		String id = CourseDAO.getCourseByID(cID).getLectureIDByIndex(index);
+		LectureDAO.getLectureByID(id).deleteMaterial(name);	
 		return getMaterials(cID, index);	
 	}
 	
@@ -282,7 +281,8 @@ public class CourseResource {
     @Produces(MediaType.TEXT_PLAIN)
 	public String updateMaterial(@PathParam("courseID") String cID, @PathParam("lectureIndex") int index,
 			@PathParam("materialName") String name , @FormParam("materialURL") String URL) {
-		CourseDAO.getCourseByID(cID).getLecture(index).putMaterial(name, URL);	
+		String id = CourseDAO.getCourseByID(cID).getLectureIDByIndex(index);
+		LectureDAO.getLectureByID(id).putMaterial(name, URL);	
 		return getMaterials(cID, index);	
 	}
 
