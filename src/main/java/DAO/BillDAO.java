@@ -29,13 +29,17 @@ public class BillDAO {
 		String timestamp = ZonedDateTime.now().toString();
 		
 		Map<String, Object> itemMap = new HashMap<>();
-		itemMap.put("studentId", sID);
+		itemMap.put("studentID", sID);
 		itemMap.put("timestamp", timestamp);
 		itemMap.put("registered courses", courseNum);
 		itemMap.put("billing total", courseNum*PRICE_PER_COURSE);		
 		table.putItem(Item.fromMap(itemMap));
 		
-		return table.getItem("studentId", sID, "time", timestamp).toJSON();
+		return table.getItem("studentID", sID, "timestamp", timestamp).toJSON();
+	}
+	
+	public static void main(String[] args) {
+		generateBill("S1248234350");
 	}
 	
 }

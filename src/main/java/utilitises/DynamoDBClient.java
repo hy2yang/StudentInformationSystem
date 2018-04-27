@@ -27,7 +27,6 @@ public class DynamoDBClient {
 	
 	private static AmazonDynamoDB ddbClient=AmazonDynamoDBClientBuilder
 			.standard()
-			.withCredentials(new EnvironmentVariableCredentialsProvider())
 			.withRegion("us-west-2")
 			.build();
 	

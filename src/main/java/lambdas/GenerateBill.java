@@ -16,7 +16,7 @@ public class GenerateBill implements RequestHandler<Map<String, Object>, Map<Str
 		String sID = (String) json.get("studentID");
 		
 		try {
-			URL url = new URL("http://default-environment.9zgzmiickn.us-east-2.elasticbeanstalk.com/billing/"+sID);
+			URL url = new URL("http://default-environment.9zgzmiickn.us-east-2.elasticbeanstalk.com/webapi/billing/"+sID);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 			

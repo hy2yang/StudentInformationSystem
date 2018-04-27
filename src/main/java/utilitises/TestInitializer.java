@@ -17,9 +17,9 @@ public class TestInitializer {
 	
 	public static void main(String[] args) {
 		System.out.println("adding test values"); 
-		String sid0= StudentDAO.saveStudent(new Student("tsdasdw", "tsdasdw@cecef.com"));
-		String sid1= StudentDAO.saveStudent(new Student("asdwd", "asdwd@cecef.com"));
-		String sid2= StudentDAO.saveStudent(new Student("oiuhgtt", "oiuhgtt@cecef.com"));
+		String sid0= StudentDAO.addNewStudent(new Student("tsdasdw", "tsdasdw@cecef.com"));
+		String sid1= StudentDAO.addNewStudent(new Student("asdwd", "asdwd@cecef.com"));
+		String sid2= StudentDAO.addNewStudent(new Student("oiuhgtt", "oiuhgtt@cecef.com"));
 		
 		Lecture[] samplesL = new Lecture[3];
 		for (int i=0;i<samplesL.length;++i) {
@@ -45,19 +45,6 @@ public class TestInitializer {
 			CourseDAO.saveCourse(samplesC[i]);
 		}
 		
-		Program s0= new Program("0","ptest0");
-		s0.addCourseByID("this0");
-		ProgramDAO.saveProgram(s0);
-		
-		
-		Program s1= new Program("1","ptest1");
-		s1.addCourseByID("is1");
-		ProgramDAO.saveProgram(s1);
-		
-		Program s2= new Program("2","ptest2");
-		s2.addCourseByID("test2");
-		ProgramDAO.saveProgram(s2);
-		
 		
 		Program p1 = new Program("P4341", "testp1");
 		Program p2 = new Program("P8375", "testp2");
@@ -66,9 +53,9 @@ public class TestInitializer {
 		ProgramDAO.saveProgram(p1);
 		ProgramDAO.saveProgram(p2);
 		
-		CrossDAO.studentEnrollCourse(sid0,"this0");
-		CrossDAO.studentEnrollCourse                                                                                                               (sid1,"is1");
-		CrossDAO.studentEnrollCourse(sid2,"test2");	
+		CrossDAO.studentEnrollCourse(sid0,"A1");
+		CrossDAO.studentEnrollCourse(sid1,"A1");
+		CrossDAO.studentEnrollCourse(sid2,"A1");	
 		
 		AnnouncementDAO.saveAnnouncement(new Announcement("A1", "fefe",
 				"new test header", "this announcement has just been added to ddb"));
