@@ -4,17 +4,16 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
-import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
-public class GenerateBill implements RequestHandler<String, String>{
+public class GenerateBill implements RequestHandler<Map<String, Object>, Map<String, Object>>{
 
 	@Override
-	public String handleRequest(String json, Context context) {
-		Item student = Item.fromJSON(json);
-		String sID = student.getString("studentID");
+	public Map<String, Object> handleRequest(Map<String, Object> json, Context context) {
+		String sID = (String) json.get("studentID");
 		
 		try {
 			URL url = new URL("http://default-environment.9zgzmiickn.us-east-2.elasticbeanstalk.com/billing/"+sID);
