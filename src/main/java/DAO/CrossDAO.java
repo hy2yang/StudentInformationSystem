@@ -8,8 +8,7 @@ import utilitises.DynamoDBClient;
 
 public class CrossDAO {
 	
-	private static DynamoDBMapper mapper = DynamoDBClient.getMapper();
-	
+	private static DynamoDBMapper mapper = DynamoDBClient.getMapper();	
 	
 	/*
 	public static Set<Course> getCoursesOfProgram(String pID) {
@@ -21,6 +20,7 @@ public class CrossDAO {
 		return courses;
 	}
 	*/
+	
 	public static void studentEnrollCourse(String sID, String cID) {
 		Student s = StudentDAO.getStudentByID(sID);
 		Course c = CourseDAO.getCourseByID(cID);

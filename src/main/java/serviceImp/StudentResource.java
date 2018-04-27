@@ -40,8 +40,8 @@ public class StudentResource {
 	
 	@POST
     @Produces(MediaType.TEXT_PLAIN)
-	public String addStudent( @FormParam("studentName") String name, @FormParam("email") String email){		
-		return StudentDAO.saveStudent( new Student(name, email));
+	public String addnewStudent( @FormParam("studentName") String name, @FormParam("email") String email){		
+		return StudentDAO.addNewStudent( new Student(name, email));
 	}
 	
 	@Path("/{studentID}")
@@ -73,7 +73,8 @@ public class StudentResource {
 		Student s=StudentDAO.getStudentByID(sID);
 		if (!name.equals("")) s.setName(name);
 		if (!pID.equals("")) s.setProgramID(pID);
-		return getAllStudents();
+		StudentDAO.saveStudent(s);
+		return s.toString();
 	}
 	
 

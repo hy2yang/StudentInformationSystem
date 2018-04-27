@@ -14,6 +14,16 @@ public class StudentDAO {
 	
 	private static DynamoDBMapper mapper = DynamoDBClient.getMapper();
 	
+	public static String addNewStudent (Student s) {	
+		s.setStudentID(sIDgen(s.hashCode()));
+		mapper.save(s);
+		return s.getStudentID();
+	}
+	
+	private static String sIDgen( int i) {
+		return String.format("%s%010d", "S" ,i);
+	}	
+	
 	public static String saveStudent (Student s) {	
 		mapper.save(s);
 		return s.getStudentID();
@@ -39,10 +49,6 @@ public class StudentDAO {
 		Student temp = new Student();
 		temp.setStudentID(sID);
 		mapper.delete(temp);
-	}
-	
-	public static void saveStudentRecord(Student s) {
-		mapper.save(s);
 	}
 	
 	public static void main(String[] args) {

@@ -25,14 +25,12 @@ import com.amazonaws.services.dynamodbv2.util.TableUtils;
 @SuppressWarnings("unused")
 public class DynamoDBClient {
 	
-	/*private static AWSCredentialsProvider credentialsProvider =
-			new EnvironmentVariableCredentialsProvider(); //new ProfileCredentialsProvider();//
-*/	
 	private static AmazonDynamoDB ddbClient=AmazonDynamoDBClientBuilder
 			.standard()
-			//.withCredentials(credentialsProvider)
+			.withCredentials(new EnvironmentVariableCredentialsProvider())
 			.withRegion("us-west-2")
 			.build();
+	
 	private static DynamoDB ddb = new DynamoDB(ddbClient);
 	
 	public static DynamoDBMapper getMapper() {
