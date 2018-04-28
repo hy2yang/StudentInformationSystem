@@ -12,4 +12,8 @@ public class JSONConverter {
 		return res;
 	}
 	
+	public static ObjectMapper getMapper() {
+		return mapper;
+	}
+	
 }
